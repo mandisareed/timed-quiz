@@ -3,11 +3,32 @@
 var instructions = document.querySelector(".instructions");
 instructions.textContent = "This is a multiple-choice quiz of 5 questions to test your basic coding knowledge. You have 60 seconds to complete the quiz. Each time you answer a question correctly, you move on to the next question and the timer will continue counting down at the same rate. If you answer a question INCORRECTLY, the timer will decrease by 15 seconds, continue counting down, and the next question will appear. The quiz is finished once you answer all questions or the timer runs out. Good luck!";
 
-//At the end of the instructions, there is a BUTTON that says "begin quiz"
+//a variable to reference the container div so that I can clear its contents
+    var container = document.querySelector("#container");
 
-//WHEN the user CLICKS the button, the timer begins counting down from 90.
-var beginQuiz = document.getElementById("#id").addEventListener("click", function(){
-    
+//a variable to reference the button
+var buttonEL = document.getElementsByClassName("#begin");
+
+//I need to create an object that house the arrays of questions, answers, and actual answers.
+var quiz = 
+    {
+    questionOne: "What does a javascript file end in?",
+    answersOne: {
+        a: ".html", 
+        b: ".js",
+        c: ".css"
+    },
+    actualAnswer1: "b"
+    }
+;
+
+//And JSON stringify the object to turn it into a string
+var myJSONquiz = JSON.stringify(quiz);
+
+//At the end of the instructions, there is a BUTTON that says "begin quiz"
+//WHEN the user CLICKS the button, the text displayed in the container will change to the first question
+document.getElementById("begin").addEventListener("click", function(){
+    document.getElementById("container").innerHTML = "hello";
 })
 
 //BEFORE THE GAME BEGINS: the time is at 90 seconds (1000ms = 1s)
@@ -17,29 +38,9 @@ var secondsLeft = 60;
 
 
 
-//For each question, there will be 3 or 4 choices from which the user can click on.
+//For each question, there will be choices from which the user can click on.
 
-//I need to create an object that house the arrays of questions, answers, and actual answers.
-var quiz = [
-    {
-    questionOne: "What does a javascript file end in?",
-    answersOne: {
-        a: ".html", 
-        b: ".js",
-        c: ".css"
-    },
-    actualAnswer1: "b"
-    },
-    {
-    questionTwo: "A string is defined by a set of ______. ",
-    answersTwo: {
-        a: "curly brackets",
-        b: "parentheses",
-        c: "quotation marks"
-    },
-    actualAnswer2: "c"
-    }
-];
+
 
 //IF the user chooses the correct answer (only one per question), "CORRECT!" will be displayed in the window, THEN one point will be added to their score and they move on to the next question.
 //ELSE the user chooses an incorrect answer (three per question), "WRONG!" will be displayed in the window, THEN their score does not change. HOWEVER, 10 seconds will be deducted from the timer, and they move on to the next question.
