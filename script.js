@@ -24,11 +24,15 @@ var quiz =
 
 //And JSON stringify the object to turn it into a string
 var myJSONquiz = JSON.stringify(quiz);
+console.log(myJSONquiz);
 
 //At the end of the instructions, there is a BUTTON that says "begin quiz"
 //WHEN the user CLICKS the button, the text displayed in the container will change to the first question
 document.getElementById("begin").addEventListener("click", function(){
-    document.getElementById("container").innerHTML = "hello";
+    document.getElementById("container").innerHTML = " ";
+    var question = document.createElement("h1");
+    question.textContent = quiz.questionOne;
+    document.getElementById("container").appendChild(question);
 })
 
 //BEFORE THE GAME BEGINS: the time is at 90 seconds (1000ms = 1s)
