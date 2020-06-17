@@ -14,8 +14,8 @@ var quiz =
     {
     questionOne: "What does a javascript file end in?",
     answersOne: {
-        a: ".html", 
-        b: ".js",
+        a: "a: .html", 
+        b: "b: .js",
         c: ".css"
     },
     actualAnswer1: "b"
@@ -33,6 +33,12 @@ document.getElementById("begin").addEventListener("click", function(){
     var question = document.createElement("h1");
     question.textContent = quiz.questionOne;
     document.getElementById("container").appendChild(question);
+    var answer1 = document.createElement("p");
+    answer1.textContent = quiz.answersOne.a;
+    question.appendChild(answer1);
+    var answer2 = document.createElement("p");
+    answer2.textContent = quiz.answersOne.b;
+    question.appendChild(answer2);
 })
 
 //BEFORE THE GAME BEGINS: the time is at 90 seconds (1000ms = 1s)
