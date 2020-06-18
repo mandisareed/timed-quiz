@@ -42,6 +42,7 @@ document.getElementById("begin").addEventListener("click", function () {
   answer1.onclick = function() {
   	rightorwrong.textContent = "Incorrect";
     decrementTime();
+    //if (score == 0) {userScore.innerHTML = "Your score was " + score;}
     
   }
   question.appendChild(answer1);
@@ -75,9 +76,9 @@ function setTime() {
     secondsLeft--;
     if (secondsLeft <= 0) {
     	timeEl.textContent = ""
-      userScore.textContent = "You're out of time. Score is 0."
+      userScore.textContent = "You're out of time. Score is " + score;
       clearInterval(timerInterval);
-      saveResults();
+      showForm();
     }
   }, 1000);
   console.log("test");
@@ -87,15 +88,72 @@ function decrementTime() {
 }
 
 
+var submitHighScoreButton = document.querySelector('.submit');
+
+
+submitHighScoreButton.onclick = function(evt) {
+	evt.preventDefault();
+  
+  var savedScoresString = localStorage.getItem("High_Scores");
+  var savedScores = [];
+  
+  if (savedScoresString !== null) {
+    savedScores = JSON.parse(savedScoresString);
+  }
+  
+  var userInitials = document.querySelector(".input").value;
+  var storedUserScore = {
+    initials: userInitials,
+    score: score
+  };
+  
+  savedScores.push(storedUserScore);
+  
+  var storedUserScores = JSON.stringify(savedScores);
+  localStorage.setItem("High_Scores", storedUserScores);
+  saveScoreForm.style.display = "none";
+  
+}
+
 //For each question, there will be choices from which the user can click on.
 
 //IF the user chooses the correct answer (only one per question), "CORRECT!" will be displayed in the window, THEN one point will be added to their score and they move on to the next question.
 //ELSE the user chooses an incorrect answer (three per question), "WRONG!" will be displayed in the window, THEN their score does not change. HOWEVER, 10 seconds will be deducted from the timer, and they move on to the next question.
 
 //IF the timer reaches 0 before the end of the quiz, then the user is told "Game Over", shown their score, and PROMPTED to enter their initials and submit them.
-var saveScore = document.querySelector(".save-score");
-function saveResults() {
-	saveScore.style.display = "block";
+var saveScoreForm = document.querySelector(".save-score");
+var retakeButton = document.querySelector(".retake");
+var highScoresButton = document.querySelector(".view-high-scores");
+
+function showForm() {
+	saveScoreForm.style.display = "block";
+  retakeButton.style.display = "block";
+  highScoresButton.style.display = "block";
+}
+
+retakeButton.onclick = function() {
+  window.location.reload();
+}
+
+highScoresButton.onclick = function() {
+  var highScoresList = document.querySelector('.high-scores');
+  
+  var savedScoresString = localStorage.getItem("High_Scores");
+  var savedScores = [];
+  
+  if (savedScoresString !== null) {
+    savedScores = JSON.parse(savedScoresString);
+  }
+  
+  for(var i = 0; i < savedScores.length; i++) {
+    var savedScore = savedScores[i];
+    var listElement = document.createElement("li");
+    listElement.textContent = savedScore.initials + " - " + savedScore.score;
+    highScoresList.appendChild(listElement)
+  }
+  
+  // loop through high scores
+
 }
 
 //Local storage saves the user's initials and high score.
