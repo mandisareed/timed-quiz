@@ -10,10 +10,11 @@ var container = document.querySelector("#container");
 //a variable to reference the begin quiz button
 var buttonEL = document.getElementsByClassName("#begin");
 
-//create a variable to reference the time element
+//create a variable to reference the time element and the element to dispay the verdict of the answer choice
 var timeEl = document.querySelector(".timer");
 var rightorwrong = document.querySelector(".rightorwrong");
 
+//a variable for the base score
 var score = 0;
 
 //I need to create an object that houses the questions, answers, and actual answers.
@@ -26,13 +27,15 @@ var quiz = {
   },
   actualAnswer1: "b",
 };
-//And JSON stringify the object to turn it into a string
+//And JSON stringify the object to turn it into a string to be displayed
 var myJSONquiz = JSON.stringify(quiz);
 
 //At the end of the instructions, there is a BUTTON that says "begin quiz"
-//WHEN the user CLICKS the button, the text displayed in the container will change to the first question + answer choices
+//WHEN the user CLICKS the button, the text displayed in the container will change to display the first question + answer choices
+//IF the user chooses the correct answer "CORRECT!" will be displayed in the window.
+//ELSE the user chooses an incorrect answer "INCORRECT!" will be displayed in the window, and time will be deducted from the timer.
 document.getElementById("begin").addEventListener("click", function () {
-  var userScore = document.getElementById("user-score")
+  var userScore = document.getElementById("user-score");
   document.getElementById("container").style.display = "none";
   var question = document.createElement("h1");
   question.textContent = quiz.questionOne;
@@ -57,12 +60,12 @@ document.getElementById("begin").addEventListener("click", function () {
    }
   setTime();
 
-  //BEFORE THE GAME BEGINS: the time is at 10 seconds (1000ms = 1s)
-  //set a variable to track seconds remaining
-
-  //create a function to start the countdown
 });
 
+//IF the timer reaches 0 before the end of the quiz, then the user is told "Game Over", shown their score, and PROMPTED to enter their initials and submit them.
+  //Timer starts at 10 seconds (1000ms = 1s)
+  //set a variable to track seconds remaining
+  //create a function to start the countdown
 var secondsLeft = 10;
 var userScore = document.getElementById("user-score");
 function setTime() {
@@ -87,12 +90,10 @@ function decrementTime() {
   secondsLeft = secondsLeft - 2;
 }
 
-
+//When the user clicks on the submit high score button, their initials and score (remaming time) are stored in local storage
 var submitHighScoreButton = document.querySelector('.submit');
-
-
-submitHighScoreButton.onclick = function(evt) {
-	evt.preventDefault();
+submitHighScoreButton.onclick = function(event) {
+	event.preventDefault();
   
   var savedScoresString = localStorage.getItem("High_Scores");
   var savedScores = [];
@@ -115,12 +116,9 @@ submitHighScoreButton.onclick = function(evt) {
   
 }
 
-//For each question, there will be choices from which the user can click on.
-
-//IF the user chooses the correct answer (only one per question), "CORRECT!" will be displayed in the window, THEN one point will be added to their score and they move on to the next question.
-//ELSE the user chooses an incorrect answer (three per question), "WRONG!" will be displayed in the window, THEN their score does not change. HOWEVER, 10 seconds will be deducted from the timer, and they move on to the next question.
-
-//IF the timer reaches 0 before the end of the quiz, then the user is told "Game Over", shown their score, and PROMPTED to enter their initials and submit them.
+//Once the quiz is over, the user will need to enter their initials and submit their score (remaining time)
+//When the user enters their initials and clicks on the button to submit their score, their score is being appended to the list element of saved scores,
+//and they can view the saved scores via a loop
 var saveScoreForm = document.querySelector(".save-score");
 var retakeButton = document.querySelector(".retake");
 var highScoresButton = document.querySelector(".view-high-scores");
@@ -151,10 +149,4 @@ highScoresButton.onclick = function() {
     listElement.textContent = savedScore.initials + " - " + savedScore.score;
     highScoresList.appendChild(listElement)
   }
-  
-  // loop through high scores
-
 }
-
-//Local storage saves the user's initials and high score.
-//After initials and high score is submitted, the user can click a button "view high scores", that shows the stored initials and high scores.
