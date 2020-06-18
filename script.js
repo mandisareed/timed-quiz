@@ -12,6 +12,7 @@ var buttonEL = document.getElementsByClassName("#begin");
 
 //create a variable to reference the time element
 var timeEl = document.querySelector(".timer");
+var rightorwrong = document.querySelector(".rightorwrong");
 
 var score = 0;
 
@@ -39,8 +40,9 @@ document.getElementById("begin").addEventListener("click", function () {
   var answer1 = document.createElement("p");
   answer1.textContent = quiz.answersOne.a;
   answer1.onclick = function() {
-    userScore.innerHTML = "Incorrect"
+  	rightorwrong.textContent = "Incorrect";
     decrementTime();
+    
   }
   question.appendChild(answer1);
   var answer2 = document.createElement("p");
@@ -49,6 +51,7 @@ document.getElementById("begin").addEventListener("click", function () {
   answer2.onclick = function() {
     score = secondsLeft;
     secondsLeft = 0;
+    rightorwrong.textContent = "Correct!";
     userScore.innerHTML = "Your score was " + score;
    }
   setTime();
@@ -57,13 +60,10 @@ document.getElementById("begin").addEventListener("click", function () {
   //set a variable to track seconds remaining
 
   //create a function to start the countdown
-
-  setTimeout(function () {
-    alert("Quiz Over!");
-  }, 10000);
 });
 
 var secondsLeft = 10;
+var userScore = document.getElementById("user-score");
 function setTime() {
   //use setInterval so that the timer will continue counting down as the quiz progresses
   var timerInterval = setInterval(function () {
@@ -75,7 +75,9 @@ function setTime() {
     secondsLeft--;
     if (secondsLeft <= 0) {
     	timeEl.textContent = ""
+      userScore.textContent = "You're out of time. Score is 0."
       clearInterval(timerInterval);
+      saveResults();
     }
   }, 1000);
   console.log("test");
@@ -91,6 +93,10 @@ function decrementTime() {
 //ELSE the user chooses an incorrect answer (three per question), "WRONG!" will be displayed in the window, THEN their score does not change. HOWEVER, 10 seconds will be deducted from the timer, and they move on to the next question.
 
 //IF the timer reaches 0 before the end of the quiz, then the user is told "Game Over", shown their score, and PROMPTED to enter their initials and submit them.
+var saveScore = document.querySelector(".save-score");
+function saveResults() {
+	saveScore.style.display = "block";
+}
 
 //Local storage saves the user's initials and high score.
 //After initials and high score is submitted, the user can click a button "view high scores", that shows the stored initials and high scores.
