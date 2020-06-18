@@ -2,7 +2,7 @@
 //I need a container to display the instructions text.
 var instructions = document.querySelector(".instructions");
 instructions.textContent =
-  "This is a multiple-choice quiz of 5 questions to test your basic coding knowledge. You have 60 seconds to complete the quiz. Each time you answer a question correctly, you move on to the next question and the timer will continue counting down at the same rate. If you answer a question INCORRECTLY, the timer will decrease by 15 seconds, continue counting down, and the next question will appear. The quiz is finished once you answer all questions or the timer runs out. Good luck!";
+  "This is a multiple-choice quiz to test your basic coding knowledge. You have 10 seconds to complete the quiz. If you answer the question correctly, you move on to the next question and the timer will continue counting down at the same rate. If you answer a question INCORRECTLY, the timer will decrease, continue counting down, and the next question will appear. The quiz is finished once you answer all questions or the timer runs out. Good luck!";
 
 //a variable to reference the container div so that I can clear its contents
 var container = document.querySelector("#container");
@@ -12,6 +12,8 @@ var buttonEL = document.getElementsByClassName("#begin");
 
 //create a variable to reference the time element
 var timeEl = document.querySelector(".timer");
+
+var score = 0;
 
 //I need to create an object that houses the questions, answers, and actual answers.
 var quiz = {
@@ -29,16 +31,26 @@ var myJSONquiz = JSON.stringify(quiz);
 //At the end of the instructions, there is a BUTTON that says "begin quiz"
 //WHEN the user CLICKS the button, the text displayed in the container will change to the first question + answer choices
 document.getElementById("begin").addEventListener("click", function () {
-  document.getElementById("container").innerHTML = " ";
+  var userScore = document.getElementById("user-score")
+  document.getElementById("container").style.display = "none";
   var question = document.createElement("h1");
   question.textContent = quiz.questionOne;
-  document.getElementById("container").appendChild(question);
+  document.getElementById("quiz").appendChild(question);
   var answer1 = document.createElement("p");
   answer1.textContent = quiz.answersOne.a;
+  answer1.onclick = function() {
+    userScore.innerHTML = "Incorrect"
+    decrementTime();
+  }
   question.appendChild(answer1);
   var answer2 = document.createElement("p");
   answer2.textContent = quiz.answersOne.b;
   question.appendChild(answer2);
+  answer2.onclick = function() {
+    score = secondsLeft;
+    secondsLeft = 0;
+    userScore.innerHTML = "Your score was " + score;
+   }
   setTime();
 
   //BEFORE THE GAME BEGINS: the time is at 10 seconds (1000ms = 1s)
@@ -47,7 +59,7 @@ document.getElementById("begin").addEventListener("click", function () {
   //create a function to start the countdown
 
   setTimeout(function () {
-    alert("Hello");
+    alert("Quiz Over!");
   }, 10000);
 });
 
@@ -57,15 +69,21 @@ function setTime() {
   var timerInterval = setInterval(function () {
     //each interval does the following:
     //decrement time remaining
-    secondsLeft--;
+    
     //update the countdown
     timeEl.textContent = "Time remaining: " + secondsLeft;
-    if (secondsLeft === 0) {
+    secondsLeft--;
+    if (secondsLeft <= 0) {
+    	timeEl.textContent = ""
       clearInterval(timerInterval);
     }
   }, 1000);
   console.log("test");
 }
+function decrementTime() {
+  secondsLeft = secondsLeft - 2;
+}
+
 
 //For each question, there will be choices from which the user can click on.
 
